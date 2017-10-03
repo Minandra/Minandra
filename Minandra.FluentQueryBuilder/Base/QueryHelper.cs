@@ -29,11 +29,10 @@ namespace CqlQueryBuilder.Base
                 .Append($" {type.GetMappedPropertiesAndValuesForUpdate()} ")
                 .ToString();
 
-        internal static string Delete<T>()
-        {
-            var table = QueryCreate.GetTableName<T>();
-            return $"DELETE FROM {table}";
-        }
+        internal static string GenerateDeleteStatement<T>() =>
+            new StringBuilder()
+                .Append($"DELETE FROM {typeof(T).GetMappedTableName()}")
+                .ToString();
 
         internal static string Update<T>()
         {
