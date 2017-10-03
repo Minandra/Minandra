@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqlQueryBuilder", "CqlQueryBuilder\CqlQueryBuilder.csproj", "{417C7600-B87F-42E9-BF4F-2270077815AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqlQueryBuilder.Test", "CqlQueryBuilder.Test\CqlQueryBuilder.Test.csproj", "{2E8CAB1F-AED6-4F71-B296-D55DA1B2D7A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{417C7600-B87F-42E9-BF4F-2270077815AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{417C7600-B87F-42E9-BF4F-2270077815AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{417C7600-B87F-42E9-BF4F-2270077815AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{417C7600-B87F-42E9-BF4F-2270077815AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E8CAB1F-AED6-4F71-B296-D55DA1B2D7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E8CAB1F-AED6-4F71-B296-D55DA1B2D7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E8CAB1F-AED6-4F71-B296-D55DA1B2D7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E8CAB1F-AED6-4F71-B296-D55DA1B2D7A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C1C0705-45F8-415E-A09C-CF4BE56007EA}
+	EndGlobalSection
+EndGlobal
