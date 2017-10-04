@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CqlQueryBuilder\CqlQueryBuilder.csproj" />
+    <ProjectReference Include="..\Minandra.FluentQueryBuilder\Minandra.FluentQueryBuilder.csproj" />
   </ItemGroup>
 
 </Project>

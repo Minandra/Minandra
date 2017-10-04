@@ -20,7 +20,7 @@ namespace CqlQueryBuilder
                 throw new NotImplementedException();
 
         public DeleteBuilder<T> Delete<T>() where T : class =>
-            new DeleteBuilder<T>(QueryHelper.Delete<T>());
+            new DeleteBuilder<T>(QueryHelper.GenerateDeleteStatement<T>());
 
         public InsertBuilder<T> Insert<T>(T type) where T : class =>
             new InsertBuilder<T>(QueryHelper.GenerateInsertStatement<T>(type));

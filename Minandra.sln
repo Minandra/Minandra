@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.FluentQueryBuilder", "Minandra.FluentQueryBuilder\Minandra.FluentQueryBuilder.csproj", "{30492C37-E02B-4B87-890F-2E4D4A69A0AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.FluentQueryBuilder.Test", "Minandra.FluentQueryBuilder.Test\Minandra.FluentQueryBuilder.Test.csproj", "{C1732C3F-4707-4FC4-9882-3F6EDD76E044}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1732C3F-4707-4FC4-9882-3F6EDD76E044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1732C3F-4707-4FC4-9882-3F6EDD76E044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1732C3F-4707-4FC4-9882-3F6EDD76E044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1732C3F-4707-4FC4-9882-3F6EDD76E044}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C1C0705-45F8-415E-A09C-CF4BE56007EA}
+	EndGlobalSection
+EndGlobal
