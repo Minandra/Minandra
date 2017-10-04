@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.FluentCqlBuilder", "Minandra.FluentCqlBuilder\Minandra.FluentCqlBuilder.csproj", "{30492C37-E02B-4B87-890F-2E4D4A69A0AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minandra.FluentCqlMapper", "Minandra.FluentCqlMapper\Minandra.FluentCqlMapper.csproj", "{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minandra.Integration.Tests", "Minandra.Integration.Tests\Minandra.Integration.Tests.csproj", "{3BAD213A-24BA-4C80-8332-2DE7DE785157}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.Unit.Tests", "Minandra.Unit.Tests\Minandra.Unit.Tests.csproj", "{F42756CE-21B6-43B9-8D76-EF45C6BBD436}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30492C37-E02B-4B87-890F-2E4D4A69A0AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BAD213A-24BA-4C80-8332-2DE7DE785157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BAD213A-24BA-4C80-8332-2DE7DE785157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BAD213A-24BA-4C80-8332-2DE7DE785157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BAD213A-24BA-4C80-8332-2DE7DE785157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F42756CE-21B6-43B9-8D76-EF45C6BBD436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42756CE-21B6-43B9-8D76-EF45C6BBD436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42756CE-21B6-43B9-8D76-EF45C6BBD436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42756CE-21B6-43B9-8D76-EF45C6BBD436}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C1C0705-45F8-415E-A09C-CF4BE56007EA}
+	EndGlobalSection
+EndGlobal

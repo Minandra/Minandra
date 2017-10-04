@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="AggregateFunctions\" />
+    <Folder Include="CqlBatchStatements\InsertStatement\" />
+    <Folder Include="CqlBatchStatements\DeleteStatement\" />
+    <Folder Include="CqlBatchStatements\UpdateStatement\" />
+    <Folder Include="CqlStatements\InsertStatement\" />
+    <Folder Include="CqlStatements\DeleteStatement\" />
+    <Folder Include="CqlStatements\UpdateStatement\" />
+    <Folder Include="CqlStatements\SelectStatement\" />
+    <Folder Include="Predicates\" />
+    <Folder Include="Operators\Logicals\" />
+    <Folder Include="Operators\Comparisons\" />
+  </ItemGroup>
+
+</Project>
