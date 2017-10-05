@@ -12,7 +12,6 @@
     <Folder Include="CqlStatements\InsertStatement\" />
     <Folder Include="CqlStatements\DeleteStatement\" />
     <Folder Include="CqlStatements\UpdateStatement\" />
-    <Folder Include="CqlStatements\SelectStatement\" />
     <Folder Include="Predicates\" />
     <Folder Include="Operators\Logicals\" />
     <Folder Include="Operators\Comparisons\" />

@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.FluentCqlBuilder", "Minandra.FluentCqlBuilder\Minandra.FluentCqlBuilder.csproj", "{30492C37-E02B-4B87-890F-2E4D4A69A0AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minandra.FluentCqlMapper", "Minandra.FluentCqlMapper\Minandra.FluentCqlMapper.csproj", "{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.FluentCqlMapper", "Minandra.FluentCqlMapper\Minandra.FluentCqlMapper.csproj", "{9AF25E27-3C7B-4CC6-8384-59FA77E6B120}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minandra.Integration.Tests", "Minandra.Integration.Tests\Minandra.Integration.Tests.csproj", "{3BAD213A-24BA-4C80-8332-2DE7DE785157}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.Integration.Tests", "Minandra.Integration.Tests\Minandra.Integration.Tests.csproj", "{3BAD213A-24BA-4C80-8332-2DE7DE785157}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minandra.Unit.Tests", "Minandra.Unit.Tests\Minandra.Unit.Tests.csproj", "{F42756CE-21B6-43B9-8D76-EF45C6BBD436}"
 EndProject
