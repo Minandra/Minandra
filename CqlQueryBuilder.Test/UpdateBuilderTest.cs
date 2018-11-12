@@ -23,7 +23,7 @@ namespace CqlQueryBuilder.Test
             QueryBuilder
                 .New()
                 .Update(product)
-                .GetCqlStatement()
+                .Build()
                 .Should()
                 .NotBeNullOrWhiteSpace();
         }
@@ -44,7 +44,7 @@ namespace CqlQueryBuilder.Test
             string updateStatement = QueryBuilder
                 .New()
                 .Update(product)
-                .GetCqlStatement();
+                .Build();
 
             updateStatement
                 .Should()

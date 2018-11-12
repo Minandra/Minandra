@@ -5,23 +5,27 @@ using CqlQueryBuilder.Builders.Contracts;
 
 namespace CqlQueryBuilder.Builders
 {
-    public class UpdateBuilder<T> : CqlStatementBase, IWhereBuilder<UpdateBuilder<T>, T> where T : class
+    public class UpdateBuilder<T> : CqlStatementBase,
+        IWhereBuilder<WhereBuilder<T>, T>,
+        IUpdateBuilder<UpdateBuilder<T>> where T : class
     {
-        public UpdateBuilder(string query) : base(query)
-        {
+        public UpdateBuilder(string query) : base(query) { }
 
+        public WhereBuilder<T> Where(Expression<Func<T, bool>> parameters)
+        {
+            AddStatement(QueryHelper.Where(parameters));
+            return new WhereBuilder<T>(Build());
         }
 
-        public UpdateBuilder<T> Set(params Expression<Func<T, object>>[] values)
+        public WhereBuilder<T> WhereIn(Expression<Func<T, object>> parameter, object[] values)
         {
-            var aa = QueryHelper.Set(values);
+            AddStatement(QueryHelper.WhereIn(parameter, values));
+            return new WhereBuilder<T>(Build());
+        }
+
+        public UpdateBuilder<T> Set(Expression<Func<UpdateBuilder<T>, object>> parameter)
+        {
             throw new NotImplementedException();
-        }
-
-        public UpdateBuilder<T> Where(Expression<Func<T, bool>> parameters)
-        {
-            this.AddStatement(QueryHelper.Where(parameters));
-            return new UpdateBuilder<T>(GetCqlStatement());
         }
     }
 }

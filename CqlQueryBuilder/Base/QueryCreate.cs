@@ -1,61 +1,14 @@
-﻿using CqlQueryBuilder.Utils;
-using System;
-using System.Collections;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using CqlQueryBuilder.TypeConversion;
 
 namespace CqlQueryBuilder.Base
 {
     public static class QueryCreate
     {
-        private static string ConvertValue(object value)
-        {
-            var result = value.GetType().Name.ToLower();
-
-            switch (result)
-            {
-                case "string":
-                case "datetime":
-                    value = $"'{value}'";
-                    break;
-            }
-
-            return value.ToString();
-        }
-
-        public static string GetTableName<T>() => typeof(T).GetMappedTableName();
-
-        public static string GetPropertiesName<T>() =>
-            string.Join(", ", typeof(T).GetListOfMappedProperties());
-
-        public static string GetValuesAndParametersName<T>(params Expression<Func<T, object>>[] fields)
-        {
-            foreach (var field in fields)
-            {
-                Recursive(field);
-            }
-
-            return null;
-        }
-
-        public static string GetValuesByParametersName<T>(Expression<Func<T, object>>[] fields)
-        {
-            var values = string.Empty;
-
-            foreach (var field in fields)
-            {
-                var right = ((BinaryExpression)field.Body).Right;
-                var value = Expression.Lambda(right).Compile().DynamicInvoke();
-                value = ConvertValue(value);
-                values += $"{value}, ";
-            }
-
-            return values.Remove(values.Length - 2);
-        }
-
-        public static string GetParametersName<T>(Expression<Func<T, object>> field)
+        public static string GetParameterName<T>(Expression<Func<T, object>> field)
         {
             var parameters = string.Empty;
 
@@ -82,74 +35,23 @@ namespace CqlQueryBuilder.Base
             return parameters.Remove(parameters.Length - 2);
         }
 
-        public static string GetParametersName<T>(Expression<Func<T, object>>[] fields)
+        public static string GetParameterName<T>(Expression<Func<T, object>>[] fields)
         {
+            if (fields == null || !fields.Any())
+            {
+                const string messageSelectParameters = "Ex: Select<T>(p => new {p.Id, p.Name})";
+                var msgError = $"Argument must not be null or empty. Use a criteria: {messageSelectParameters}";
+                throw new ArgumentNullException(nameof(fields), msgError);
+            }
+
             var parameters = string.Empty;
 
-            foreach (var field in fields)
-            {
-                parameters += GetParametersName(field) + ", ";
-            }
+            var args = ((dynamic) fields.FirstOrDefault()?.Body)?.Arguments;
+
+            foreach (var arg in args)
+                parameters += Recursive(arg) + ", ";
 
             return parameters.Remove(parameters.Length - 2);
-        }
-
-        private static string ValueToString(object value, bool isUnary)
-        {
-            if (!(value is bool))
-                return ConvertValue(value);
-
-            var result = Convert.ToBoolean(value);
-
-            if (isUnary)
-                return result ? "(1=1)" : "(1=0)";
-
-            return result ? "1" : "0";
-        }
-
-        private static string NodeTypeToString(ExpressionType nodeType, bool rightIsNull)
-        {
-            switch (nodeType)
-            {
-                case ExpressionType.Add:
-                    return "+";
-                case ExpressionType.And:
-                    return "&";
-                case ExpressionType.AndAlso:
-                    return "AND";
-                case ExpressionType.Divide:
-                    return "/";
-                case ExpressionType.Equal:
-                    return rightIsNull ? "IS" : "=";
-                case ExpressionType.ExclusiveOr:
-                    return "^";
-                case ExpressionType.GreaterThan:
-                    return ">";
-                case ExpressionType.GreaterThanOrEqual:
-                    return ">=";
-                case ExpressionType.LessThan:
-                    return "<";
-                case ExpressionType.LessThanOrEqual:
-                    return "<=";
-                case ExpressionType.Modulo:
-                    return "%";
-                case ExpressionType.Multiply:
-                    return "*";
-                case ExpressionType.Negate:
-                    return "-";
-                case ExpressionType.Not:
-                    return "NOT";
-                case ExpressionType.NotEqual:
-                    return "<>";
-                case ExpressionType.Or:
-                    return "|";
-                case ExpressionType.OrElse:
-                    return "OR";
-                case ExpressionType.Subtract:
-                    return "-";
-            }
-
-            throw new Exception($"Error: {nodeType}");
         }
 
         private static object GetValue(Expression member)
@@ -160,160 +62,62 @@ namespace CqlQueryBuilder.Base
             return result();
         }
 
-        private static string RecursiveUnaryExpression(Expression expression)
-        {
-            var unary = (UnaryExpression)expression;
-            var right = Recursive(unary.Operand);
-            var result = NodeTypeToString(unary.NodeType, right == "NULL") + " " + right;
-
-            if (result.Contains("NOT") && result.Contains("IN"))
-            {
-                result = result.Replace("NOT", "").Trim();
-                var pos = result.IndexOf("IN", StringComparison.Ordinal);
-                return result.Insert(pos, "NOT ");
-            }
-
-            if (result.Contains("NOT"))
-            {
-                result = $"{right} = false";
-            }
-
-            return result;
-        }
-
         private static string RecursiveBinaryExpression(Expression expression)
         {
             var body = (BinaryExpression)expression;
             var right = Recursive(body.Right);
-            return Recursive(body.Left) + " " + NodeTypeToString(body.NodeType, right == "NULL") + " " + right;
+            return Recursive(body.Left) + " " + TypeConverter.NodeTypeToString(body.NodeType) + " " + right;
         }
 
         private static string RecursiveConstantExpression(Expression expression)
         {
             var constant = (ConstantExpression)expression;
-            return ConvertValue(constant);
+            return TypeConverter.ConvertToTypeCode(constant);
         }
 
         private static string RecursiveMemberExpression(Expression expression)
         {
             var member = (MemberExpression)expression;
 
-            if (member.Member is PropertyInfo property)
+            if (!(member.Member is PropertyInfo property))
+                throw new Exception($"Expression does not refer to a property or field: {expression}");
+
+            // hack DateTime
+            if (property.DeclaringType == typeof(DateTime))
             {
-                var attributes = property.CustomAttributes.ToList();
-
-                if (attributes.Any())
-                {
-                    foreach (var attr in attributes)
-                    {
-                        return attr.ConstructorArguments.FirstOrDefault().Value.ToString();
-                    }
-                }
-
-                // hack DateTime
-                if (member.Member is FieldInfo || property.DeclaringType == typeof(DateTime))
-                {
-                    return ValueToString(GetValue(member), false);
-                }
-
-                return property.Name;
+                return TypeConverter.ConvertToTypeCode(GetValue(member));
             }
 
-            throw new Exception($"Expression does not refer to a property or field: {expression}");
+            // if true expression lambda. ex: p => p.Enabled / p => !p.Enabled
+            if (property.PropertyType == typeof(bool))
+            {
+                var unary = Expression.Convert(expression, typeof(object));
+                return $"{property.Name} = {TypeConverter.NodeTypeToString(unary.NodeType)}";
+            }
+
+            return property.Name;
         }
 
-        private static string RecursiveMethodCallExpression(Expression expression)
+        private static string RecursiveUnaryExpression(Expression expression)
         {
-            var methodCall = (MethodCallExpression) expression;
-
-            //// like:
-            //if (methodCall.Method == typeof(string).GetMethod("Contains", new[] { typeof(string) }))
-            //{
-            //    return Recursive(methodCall.Object) + " LIKE '%" + Recursive(methodCall.Arguments[0]) + "%')";
-            //}
-            //if (methodCall.Method == typeof(string).GetMethod("StartsWith", new[] { typeof(string) }))
-            //{
-            //    return Recursive(methodCall.Object) + " LIKE " + Recursive(methodCall.Arguments[0]) + "%')";
-            //}
-            //if (methodCall.Method == typeof(string).GetMethod("EndsWith", new[] { typeof(string) }))
-            //{
-            //    return Recursive(methodCall.Object) + " LIKE '%" + Recursive(methodCall.Arguments[0]) + "')";
-            //}
-
-            if (methodCall.Method.Name == "Parse")
-            {
-                var objectMember = Expression.Convert(methodCall, typeof(object));
-                var getterLambda = Expression.Lambda<Func<object>>(objectMember);
-
-                var unaryExpression = (UnaryExpression) getterLambda.Body;
-                var methodCallExpression = (MethodCallExpression) unaryExpression.Operand;
-
-                var methodInfoExpression = (ConstantExpression) methodCallExpression.Arguments.Last();
-                return methodInfoExpression.Value.ToString();
-            }
-
-            if (methodCall.Method.Name == "Contains")
-            {
-                Expression collection;
-                Expression property;
-                if (methodCall.Method.IsDefined(typeof(ExtensionAttribute)) && methodCall.Arguments.Count == 2)
-                {
-                    collection = methodCall.Arguments[0];
-                    property = methodCall.Arguments[1];
-                }
-                else
-                {
-                    if (!methodCall.Method.IsDefined(typeof(ExtensionAttribute)) && methodCall.Arguments.Count == 1)
-                    {
-                        collection = methodCall.Object;
-                        property = methodCall.Arguments[0];
-                    }
-                    else
-                    {
-                        throw new Exception("Error in method: " + methodCall.Method.Name);
-                    }
-                }
-
-                var values = (IEnumerable)GetValue(collection);
-                var concated = values.Cast<object>().Aggregate("", (current, e) => current + ValueToString(e, false) + ", ");
-
-                if (string.IsNullOrEmpty(concated))
-                {
-                    return ValueToString(false, true);
-                }
-
-                return Recursive(property) + " IN (" + concated.Substring(0, concated.Length - 2) + ")";
-            }
-
-        
-           return GetValue(expression).ToString();
+            var unary = (UnaryExpression)expression;
+            var right = Recursive(unary.Operand);
+            var result = $"{right} = {TypeConverter.NodeTypeToString(unary.NodeType)}";
+            return result;
         }
 
         private static string Recursive(Expression expression)
         {
-            if (expression is UnaryExpression)
+            switch (expression)
             {
-                return RecursiveUnaryExpression(expression);
-            }
-
-            if (expression is BinaryExpression)
-            {
-                return RecursiveBinaryExpression(expression);
-            }
-
-            if (expression is ConstantExpression)
-            {
-                return RecursiveConstantExpression(expression);
-            }
-
-            if (expression is MemberExpression)
-            {
-                return RecursiveMemberExpression(expression);
-            }
-
-            if (expression is MethodCallExpression)
-            {
-                return RecursiveMethodCallExpression(expression);
+                case BinaryExpression _:
+                    return RecursiveBinaryExpression(expression);
+                case ConstantExpression _:
+                    return RecursiveConstantExpression(expression);
+                case MemberExpression _:
+                    return RecursiveMemberExpression(expression);
+                case UnaryExpression _:
+                    return RecursiveUnaryExpression(expression);
             }
 
             throw new Exception($"Expression does not refer to a property or field: {expression}");
