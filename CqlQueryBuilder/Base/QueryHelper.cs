@@ -15,6 +15,26 @@ namespace CqlQueryBuilder.Base
             return $"SELECT {par} FROM {typeof(T).GetMappedTableName()}";
         }
 
+        internal static string SelectCount<T>(string countParameter, string parameters)
+        {
+            var sqlCount = $"SELECT COUNT({countParameter})";
+
+            if (!string.IsNullOrEmpty(parameters))
+                sqlCount += $", {parameters}";
+
+            return $"{sqlCount} FROM {typeof(T).GetMappedTableName()}";
+        }
+
+        internal static string SelectMax<T>(string countParameter, string parameters)
+        {
+            var sqlCount = $"SELECT MAX({countParameter})";
+
+            if (!string.IsNullOrEmpty(parameters))
+                sqlCount += $", {parameters}";
+
+            return $"{sqlCount} FROM {typeof(T).GetMappedTableName()}";
+        }
+
         internal static string GenerateInsertStatement<T>(T type) =>
             new StringBuilder()
                 .Append("INSERT INTO ")
@@ -56,13 +76,6 @@ namespace CqlQueryBuilder.Base
             return asc ? orderby + "ASC" : orderby + "DESC";
         }
 
-        internal static string SelectCount<T>(string parameter = null)
-        {
-            return parameter == null 
-                ? $"SELECT COUNT(*) FROM {typeof(T).GetMappedTableName()}" 
-                : $"SELECT COUNT({parameter}) FROM {typeof(T).GetMappedTableName()}";
-        }
-
         internal static string Where<T>(Expression<Func<T, bool>> parameters)
         {
             var query = QueryCreate.ToCql(parameters);
@@ -75,9 +88,9 @@ namespace CqlQueryBuilder.Base
             return $" WHERE {param} IN ({string.Join(", ", values.Select(p => p.GetPropertyValue()))})";
         }
 
-        internal static string And<T>(Expression<Func<T, bool>> parameters)
+        internal static string And<T>(Expression<Func<T, bool>> parameter)
         {
-            var query = QueryCreate.ToCql(parameters);
+            var query = QueryCreate.ToCql(parameter);
             return $" AND {query}";
         }
 
@@ -87,14 +100,22 @@ namespace CqlQueryBuilder.Base
             return $" AND {param} IN ({string.Join(", ", values.Select(p => p.GetPropertyValue()))})";
         }
 
-        internal static string Contains(object value)
+        internal static string Contains(object value, bool isKey = false)
         {
-            return $" CONTAINS {TypeConverter.ConvertToTypeCode(value)}";
+            return isKey ? 
+                $" CONTAINS KEY {TypeConverter.ConvertToTypeCode(value)}" 
+                : $" CONTAINS {TypeConverter.ConvertToTypeCode(value)}";
         }
 
-        internal static string Set<T>(params Expression<Func<T, object>>[] parameters)
+        public static string IFExists()
         {
-            return null;
+            return " IF EXISTS";
+        }
+
+        internal static string IF<T>(Expression<Func<T, bool>> parameter)
+        {
+            var query = QueryCreate.ToCql(parameter);
+            return $" IF {query}";
         }
     }
 }

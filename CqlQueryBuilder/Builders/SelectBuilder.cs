@@ -30,19 +30,6 @@ namespace CqlQueryBuilder.Builders
             return new SelectBuilder<T>(Build());
         }
 
-        //public SelectBuilder<T> Count()
-        //{
-        //    AddStatement(QueryHelper.Count());
-        //    return new SelectBuilder<T>(Build());
-        //}
-
-        //public SelectBuilder<T> Count(Expression<Func<T, object>> parameter)
-        //{
-        //    var param = QueryCreate.GetParameterName(parameter);
-        //    AddStatement(QueryHelper.Count(param));
-        //    return new SelectBuilder<T>(Build());
-        //}
-
         public WhereBuilder<T> Where(Expression<Func<T, bool>> parameters)
         {
             AddStatement(QueryHelper.Where(parameters));

@@ -7,7 +7,8 @@ namespace CqlQueryBuilder.Builders
 {
     public class WhereBuilder<T> : CqlStatementBase,
         IAllowFiltering<WhereBuilder<T>>,
-        IFilterCondition<WhereBuilder<T>, T>,
+        IWhereBuilderExtension<WhereBuilder<T>, T>,
+        IDeleteBuilderExtension<DeleteBuilder<T>, T>,
         IAndBuilder<WhereBuilder<T>, T> where T : class
     {
         public WhereBuilder(string query) : base(query) { }
@@ -30,10 +31,28 @@ namespace CqlQueryBuilder.Builders
             return new WhereBuilder<T>(Build());
         }
 
+        public WhereBuilder<T> ContainsKey(object value)
+        {
+            AddStatement(QueryHelper.Contains(value, true));
+            return new WhereBuilder<T>(Build());
+        }
+
         public WhereBuilder<T> AllowFiltering()
         {
             AddStatement(QueryHelper.AllowFiltering());
             return new WhereBuilder<T>(Build());
+        }
+
+        public DeleteBuilder<T> IF(Expression<Func<T, bool>> parameter)
+        {
+            this.AddStatement(QueryHelper.IF(parameter));
+            return new DeleteBuilder<T>(Build());
+        }
+
+        public DeleteBuilder<T> IFExists()
+        {
+            this.AddStatement(QueryHelper.IFExists());
+            return new DeleteBuilder<T>(Build());
         }
     }
 }

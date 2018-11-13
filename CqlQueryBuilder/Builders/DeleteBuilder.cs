@@ -23,9 +23,9 @@ namespace CqlQueryBuilder.Builders
             return new WhereBuilder<T>(Build());
         }
 
-        public DeleteBuilder<T> And(Expression<Func<T, bool>> parameters)
+        public DeleteBuilder<T> And(Expression<Func<T, bool>> parameter)
         {
-            this.AddStatement(QueryHelper.And(parameters));
+            this.AddStatement(QueryHelper.And(parameter));
             return new DeleteBuilder<T>(Build());
         }
     }
