@@ -4,27 +4,26 @@ namespace CqlQueryBuilder.Base
 {
     public class CqlStatementBase : IQuery
     {
-        private StringBuilder cqlStatements;
+        private readonly StringBuilder _cqlStatements;
 
         protected CqlStatementBase()
         {
-            cqlStatements = new StringBuilder();
+            _cqlStatements = new StringBuilder();
         }
 
-        protected CqlStatementBase(string query)
-            : this()
+        protected CqlStatementBase(string query) : this()
         {
-            cqlStatements.Append(query);
+            _cqlStatements.Append(query);
         }
 
-        public string GetCqlStatement()
+        public string Build()
         {
-            return cqlStatements.ToString();
+            return _cqlStatements.ToString();
         }
 
         internal CqlStatementBase AddStatement(string statement)
         {
-            cqlStatements.Append(statement);
+            _cqlStatements.Append(statement);
             return this;
         }
     }

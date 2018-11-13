@@ -2,6 +2,6 @@
 {
     public interface IAllowFiltering<out T> where T : class
     {
-        T AllowFilter();
+        T AllowFiltering();
     }
 }
