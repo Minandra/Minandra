@@ -47,7 +47,7 @@ namespace CqlQueryBuilder.Base
         internal static string GenerateUpdateStatement<T>(T type) where T : class =>
             new StringBuilder() 
                 .Append($"UPDATE {typeof(T).GetMappedTableName()} SET")
-                .Append($" {type.GetMappedPropertiesAndValuesForUpdate()} ")
+                .Append($" {type.GetMappedPropertiesAndValuesForUpdate()}")
                 .ToString();
 
         internal static string Delete<T>()

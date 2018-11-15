@@ -1,54 +1,36 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq.Expressions;
+using System.Text;
 
 namespace CqlQueryBuilder.TypeConversion
 {
     public class TypeConverter
     {
-        private static TypeCode TryGetTypeCode(dynamic value)
+        public static string ConvertToTypeCode(object value)
         {
-            try
+            switch (value.GetType().FullName)
             {
-                return Type.GetTypeCode(value.Type as Type);
+                case "System.Int16":
+                case "System.Int32":
+                case "System.Int64":
+                    return value.ToString();
+                case "System.String":
+                case "System.Guid":
+                case "System.Char":
+                    return $"'{value.ToString().Replace("\"", "'")}'";
+                case "System.Decimal":
+                case "System.Float":
+                    return $"{Convert.ToDecimal(value).ToString("F3", CultureInfo.InvariantCulture)}";
+                case "System.DateTimeOffset":
+                    return $"'{Convert.ToDateTime(((DateTimeOffset)value).UtcDateTime, CultureInfo.InvariantCulture)}'";
+                case "System.DateTime":
+                    return $"'{Convert.ToDateTime(value, CultureInfo.InvariantCulture)}'";
+                case "System.Boolean":
+                    return value.ToString();
+                default:
+                    return string.Empty;
             }
-            catch
-            {
-                return Type.GetTypeCode(value.GetType());
-            }
-        }
-
-        public static string ConvertToTypeCode(dynamic value)
-        {
-            var typeValue = TryGetTypeCode(value);
-            var result = string.Empty;
-
-            switch (typeValue)
-            {
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                    result = value.ToString();
-                    break;
-
-                case TypeCode.String:
-                    result = value.ToString().Replace("\"", "'");
-                    break;
-
-                case TypeCode.Decimal:
-                case TypeCode.Single:
-                    result = $"{Convert.ToDecimal(value.ToString()).ToString().Replace(",", ".")}";
-                    break;
-
-                case TypeCode.DateTime:
-                    result = $"'{Convert.ToDateTime(value.ToString()):yyyy-MM-dd HH:mm:ss}'";
-                    break;
-
-                case TypeCode.Boolean:
-                    result = value.ToString();
-                    break;
-            }
-
-            return result;
         }
 
         //Operations: = | < | > | <= | >= | CONTAINS | CONTAINS KEY
@@ -77,7 +59,7 @@ namespace CqlQueryBuilder.TypeConversion
                     return "true";
             }
 
-            throw new Exception($"Error: {nodeType}");
+            throw new Exception($"The {nameof(nodeType)} with value {nodeType} is not supported.");
         }
     }
 }

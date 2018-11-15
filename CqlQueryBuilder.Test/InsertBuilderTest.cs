@@ -8,54 +8,39 @@ namespace CqlQueryBuilder.Test
     public class InsertBuilderTest
     {
         [Fact]
-        public void InsertStatementShouldNotBeNullOrEmpty()
+        public void QueryBuilder_GeneratesInsertStatement_ShouldNotBeNullOrEmpty()
         {
+            // Arrange
+            var createdOn = DateTime.Now;
+            var registered = DateTime.Now;
+            var id = Guid.Parse("15eb2128-2f2b-49c5-8bc8-5cbc4c75132d");
+
+            var expectedInsertCQLStatement = $"INSERT INTO Product (Id, Registered, CreatedOn, Name, Price, Enabled) VALUES ('{id}', '{createdOn}', '{registered}', 'Product Name', 150.000, True)";
+
             var product = new Product
             {
                 Enabled = true,
-                Id = Guid.NewGuid(),
+                Id = id,
                 Name = "Product Name",
-                Price = 150.00m,
-                CreatedOn = DateTime.Now,
-                Registered = DateTime.Now
+                Price = 150.000m,
+                CreatedOn = createdOn,
+                Registered = registered
             };
 
-            QueryBuilder
+            // Act
+
+            string cqlInsertStatementOutcome = QueryBuilder
                 .New()
-                .Insert(product)
-                .Build()
-                .Should()
-                .NotBeNullOrWhiteSpace();
-        }
-
-        [Fact]
-        public void InsertStatementShouldContain_InsertStatementParts()
-        {
-            var product = new Product
-            {
-                Enabled = true,
-                Id = Guid.NewGuid(),
-                Name = "Product Name",
-                Price = 150.00m,
-                CreatedOn = DateTime.Now,
-                Registered = DateTime.Now
-            };
-
-            string insertStatement = QueryBuilder.New()
                 .Insert(product)
                 .Build();
 
-            insertStatement
-                .Should()
-                .Contain("INSERT");
+            // Assert
 
-            insertStatement
+            cqlInsertStatementOutcome
                 .Should()
-                .Contain("Product");
-
-            insertStatement
-                .Should()
-                .Contain("VALUES");
+                .NotBeNullOrWhiteSpace()
+                    .And
+                .Be(expectedInsertCQLStatement, $"The CQL Insert statement must be equals to the expected one.");
         }
     }
 }
