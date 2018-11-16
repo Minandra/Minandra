@@ -8,7 +8,7 @@ namespace CqlQueryBuilder.Test
     public class UpdateBuilderTest
     {
         [Fact]
-        public void UpdateStatementShouldNotBeNullOrEmptyForWholeInstance()
+        public void QueryBuilder_GenerateUpdateStatement_ShouldNotBeNullOrEmpty()
         {
             // Arrange
             var createdOn = DateTime.Now;
