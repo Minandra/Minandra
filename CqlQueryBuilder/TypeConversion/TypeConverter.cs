@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace CqlQueryBuilder.TypeConversion
 {
@@ -9,6 +8,37 @@ namespace CqlQueryBuilder.TypeConversion
     {
         public static string ConvertToTypeCode(object value)
         {
+            //switch (Type.GetTypeCode(value.GetType()))
+            //{
+            //    case TypeCode.Byte:
+            //    case TypeCode.Empty:
+            //    case TypeCode.DBNull:
+            //    case TypeCode.Object:
+            //        return string.Empty;
+
+            //    case TypeCode.Boolean:
+            //        return value.ToString();
+            //    case TypeCode.DateTime:
+            //        return $"'{Convert.ToDateTime(value, CultureInfo.InvariantCulture)}'";
+            //    case TypeCode.Decimal:
+            //    case TypeCode.Double:
+            //    case TypeCode.Single:
+            //        return $"{Convert.ToDecimal(value).ToString("F3", CultureInfo.InvariantCulture)}";
+            //    case TypeCode.UInt16:
+            //    case TypeCode.UInt32:
+            //    case TypeCode.UInt64:
+            //    case TypeCode.SByte:
+            //    case TypeCode.Int16:
+            //    case TypeCode.Int32:
+            //    case TypeCode.Int64:
+            //        return value.ToString();
+            //    case TypeCode.String:
+            //    case TypeCode.Char:
+            //        return $"'{value.ToString().Replace("\"", "'")}'";
+            //    default:
+            //        return string.Empty;
+            //}
+
             switch (value.GetType().FullName)
             {
                 case "System.Int16":

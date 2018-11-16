@@ -29,7 +29,7 @@ namespace CqlQueryBuilder.Test
 
             // Act
 
-            string cqlUpdateStatementOutcome =
+            var cqlUpdateStatementOutcome =
                 QueryBuilder
                 .New()
                 .Update(product)
