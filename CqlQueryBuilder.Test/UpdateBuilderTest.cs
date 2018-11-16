@@ -8,55 +8,40 @@ namespace CqlQueryBuilder.Test
     public class UpdateBuilderTest
     {
         [Fact]
-        public void UpdateStatementShouldNotBeNullOrEmptyForWholeInstance()
+        public void QueryBuilder_GenerateUpdateStatement_ShouldNotBeNullOrEmpty()
         {
+            // Arrange
+            var createdOn = DateTime.Now;
+            var registered = DateTime.Now;
+            var id = Guid.Parse("15eb2128-2f2b-49c5-8bc8-5cbc4c75132d");
+
+            var expectedCqlUpdateStatement = $"UPDATE Product SET Id = '{id}', Registered = '{registered}', CreatedOn = '{createdOn}', Name = 'Product Name', Price = 150.000, Enabled = True WHERE Id = '{id}'";
+
             var product = new Product
             {
                 Enabled = true,
-                Id = Guid.NewGuid(),
+                Id = id,
                 Name = "Product Name",
                 Price = 150.00m,
-                CreatedOn = DateTime.Now,
-                Registered = DateTime.Now
+                CreatedOn = createdOn,
+                Registered = registered
             };
 
-            QueryBuilder
-                .New()
-                .Update(product)
-                .Build()
-                .Should()
-                .NotBeNullOrWhiteSpace();
-        }
+            // Act
 
-        [Fact]
-        public void UpdateStatementShouldContain_UpdateStatementPartsForWholeInstance()
-        {
-            var product = new Product
-            {
-                Enabled = true,
-                Id = Guid.NewGuid(),
-                Name = "Product Name",
-                Price = 150.00m,
-                CreatedOn = DateTime.Now,
-                Registered = DateTime.Now
-            };
-
-            string updateStatement = QueryBuilder
+            var cqlUpdateStatementOutcome =
+                QueryBuilder
                 .New()
                 .Update(product)
                 .Build();
 
-            updateStatement
-                .Should()
-                .Contain("UPDATE");
+            // Assert
 
-            updateStatement
+            cqlUpdateStatementOutcome
                 .Should()
-                .Contain("SET");
-
-            updateStatement
-                .Should()
-                .Contain("WHERE");
+                .NotBeNullOrWhiteSpace()
+                    .And
+                .Be(expectedCqlUpdateStatement, $"The CQL Update statement must be equals to the expected one.");
         }
     }
 }
